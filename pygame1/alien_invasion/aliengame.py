@@ -100,7 +100,9 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-
+                self.stats.score -= Bullet.bullet_points
+                self.sb.prep_score()
+                self.sb.check_high_score()
         self._check_bullet_alien_collisions()
 
     def _check_bullet_alien_collisions(self):
@@ -119,6 +121,10 @@ class AlienInvasion:
             self.sb.prep_score()
             self.sb.check_high_score()
 
+            self.stats.score -= Bullet.bullet_points
+            self.sb.prep_score()
+            self.sb.check_high_score()
+
         if not self.aliens:
             # Destroy existing bullets and create new fleet.
             self.bullets.empty()
@@ -128,6 +134,10 @@ class AlienInvasion:
             # Increase level.
             self.stats.level += 1
             self.sb.prep_level()
+
+
+
+
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
