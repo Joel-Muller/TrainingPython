@@ -93,6 +93,9 @@ class AlienInvasion:
         """Create a new bullet and add it to the bullets group."""
         if len(self.bullets) < self.settings.bullets_allowed:
             self.bullets.add(Bullet(self))
+            self.stats.score -= Bullet.bullet_points
+            self.sb.prep_score()
+            self.sb.check_high_score()
 
     def _update_bullets(self):
         self.bullets.update()
@@ -100,9 +103,6 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-                self.stats.score -= Bullet.bullet_points
-                self.sb.prep_score()
-                self.sb.check_high_score()
         self._check_bullet_alien_collisions()
 
     def _check_bullet_alien_collisions(self):
@@ -115,13 +115,8 @@ class AlienInvasion:
         )
 
         if collisions:
-            self.stats.score += self.settings.alien_points
             for aliens in collisions.values():
                 self.stats.score += self.settings.alien_points * len(aliens)
-            self.sb.prep_score()
-            self.sb.check_high_score()
-
-            self.stats.score -= Bullet.bullet_points
             self.sb.prep_score()
             self.sb.check_high_score()
 
@@ -134,10 +129,6 @@ class AlienInvasion:
             # Increase level.
             self.stats.level += 1
             self.sb.prep_level()
-
-
-
-
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
